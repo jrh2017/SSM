@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 /**
  * @author jiangronghua
@@ -31,6 +32,10 @@ public class FileUpAndDownController {
     public String testUp(MultipartFile photo, HttpSession session) throws IOException {
         // 获取上传的文件的文件名
         String filename = photo.getOriginalFilename();
+        // 获取上传的文件的后缀名
+        String hzName = filename.substring(filename.lastIndexOf("."));
+        String uuid = UUID.randomUUID().toString();
+        filename = uuid + hzName;
         // 获取ServletContext对象
         ServletContext servletContext = session.getServletContext();
         // 获取当前工程下photo目录的真实目录
@@ -42,6 +47,7 @@ public class FileUpAndDownController {
             file.mkdir();
         }
         String finalPath = photoPath + File.separator + filename;
+
         // 上传文件
         photo.transferTo(new File(finalPath));
         System.out.println("filename:" + filename);
